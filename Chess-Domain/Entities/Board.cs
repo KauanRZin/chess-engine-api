@@ -7,47 +7,50 @@ namespace Chess_Domain.Entities;
 public class Board
 {
     #region Attributes
-    private int Columns { get;}
+
+    private int Columns { get; }
     private int Rows { get; }
     private readonly Piece[,] _pieces;
-    
+
     #endregion
-    
+
     #region Constructor
+
     public Board(int columns = 8, int rows = 8)
     {
         Columns = columns;
         Rows = rows;
         _pieces = new Piece[columns, rows];
-        
+
     }
+
     #endregion
-    
+
     #region Methods
-    
-    public bool ValidMove(Piece piece,Position from, Position to)
+
+    public bool ValidMove(Piece piece, Position from, Position to)
     {
-       if(!piece.Move(from, to))
-       {
-           return false;
-       }
+        if (!piece.Move(from, to))
+        {
+            if (piece.CanCapture(from, to) && (PiecePosition(to) != null))
+                return true;
+            return false;
+        }
 
-       
-       
-       else if (ExistsPiece(to))
-       {
-           Piece aux = PiecePosition(to);
-           if(aux._color == piece._color || !piece.CanCapture(from,to)) 
-               return false;
-           return true;
-       }
+        else if (ExistsPiece(to))
+        {
+            Piece aux = PiecePosition(to);
+            if (aux._color == piece._color || !piece.CanCapture(from, to))
+                return false;
+            return true;
+        }
 
-       else return true;
+        else return true;
     }
-    
-    
-    
-    public void AddPiece(Piece piece, Position pos)
+
+
+
+public void AddPiece(Piece piece, Position pos)
     {     
         if (ExistsPiece(pos))
             throw new DomainException("There is already a piece in this position");
