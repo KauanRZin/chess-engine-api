@@ -15,36 +15,31 @@ public class Pawn : Piece
     
     public override bool Move(Position from, Position to)
     {
-        if (from.Row == 1 || from.Row == 6)
+        int direction = (_color == Color.White) ? 1 : -1;
+
+        // Movimento normal (1 casa)
+        if (to.Row == from.Row + direction && to.Column == from.Column)
+            return true;
+
+        // Movimento inicial (2 casas)
+        if ((_color == Color.White && from.Row == 1) ||
+            (_color == Color.Black && from.Row == 6))
         {
-            if (to.Row == from.Row + 2 || to.Row == from.Row - 2 || to.Row == from.Row + 1 || to.Row == from.Row - 1)
-            {
-                if (to.Column == from.Column)
-                {
-                    return true;
-                }
-            }
-            return false;
+            if (to.Row == from.Row + (2 * direction) && to.Column == from.Column)
+                return true;
         }
-        else
-        {
-            if (to.Row == from.Row + 1)
-            {
-                if (to.Column == from.Column)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
+
+        return false;
     }
 
     public override bool CanCapture(Position from, Position to)
     {
-        if (from.Row + 1 == to.Row && (from.Column + 1 == to.Column || from.Column - 1 == to.Column)  )
-        {
+        int direction = (_color == Color.White) ? 1 : -1;
+
+        if (to.Row == from.Row + direction &&
+            (to.Column == from.Column + 1 || to.Column == from.Column - 1))
             return true;
-        }
+
         return false;
     }
 }
