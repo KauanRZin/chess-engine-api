@@ -17,11 +17,15 @@ public class Knight : Piece
     }
     public override bool Move(Position from, Position to)
     {
-        return true;
+        int rowDiff = Math.Abs(from.Row - to.Row);
+        int colDiff = Math.Abs(from.Column - to.Column);
+
+        return (rowDiff == 2 && colDiff == 1) ||
+               (rowDiff == 1 && colDiff == 2);
     }
 
     public override bool CanCapture(Position from, Position to)
     {
-        throw new NotImplementedException();
+        return Move(from, to);
     }
 }
